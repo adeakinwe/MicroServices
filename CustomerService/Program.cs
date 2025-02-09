@@ -2,6 +2,7 @@ using System;
 using CustomerService.Interface;
 using CustomerService.Models;
 using CustomerService.Repository;
+using CustomerService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(option => 
 option.UseInMemoryDatabase("InMem"));
 builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
+builder.Services.AddHttpClient<IEventDataClient, HttpEventDataClient>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
