@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-svc-depl
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: customerservice
+  template:
+    metadata:
+      labels:
+        app: customerservice
+    spec:
+      containers:
+        - name: customerservice
+          image: adeakinwe/customerservice:latest
