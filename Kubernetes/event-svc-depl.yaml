@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: customer-svc-depl
+  name: event-svc-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: customerservice
+      app: eventservice
   template:
     metadata:
       labels:
-        app: customerservice
+        app: eventservice
     spec:
       containers:
-        - name: customerservice
-          image: adeakinwe/customerservice:latest
+        - name: eventservice
+          image: adeakinwe/eventservice:latest
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: customer-svc-clusterip-svc
+  name: event-svc-clusterip-svc
 spec:
   type: ClusterIP
   selector:
-    app: customerservice
+    app: eventservice
   ports:
-    - name: customerservice
+    - name: eventservice
       protocol: TCP
       port: 80
       targetPort: 80
