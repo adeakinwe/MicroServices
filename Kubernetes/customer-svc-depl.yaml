@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: customerservice
-          image: adeakinwe/customerservice:latest
+          image: adeakinwe/customerservice:net8.0
 
 ---
 apiVersion: v1

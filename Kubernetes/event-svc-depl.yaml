@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: eventservice
-          image: adeakinwe/eventservice:latest
+          image: adeakinwe/eventservice:net8.0
 
 ---
 apiVersion: v1
