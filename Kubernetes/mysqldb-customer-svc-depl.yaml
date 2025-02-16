@@ -17,9 +17,13 @@ spec:
           image: mysql:8.0
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: "yourpassword"
-            - name: MYSQL_DATABASE
-              value: "CUSTOMERSERVICEDB"
+            #   value: "mysqluser10$"
+            # - name: MYSQL_DATABASE
+            #   value: "CUSTOMERSERVICEDB"
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
           ports:
             - containerPort: 3306
           volumeMounts:
