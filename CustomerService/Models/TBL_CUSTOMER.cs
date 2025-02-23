@@ -8,7 +8,7 @@ namespace CustomerService.Models
     public class TBL_CUSTOMER
     {
         [Key]
-        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CUSTOMERID { get; set; }
         [Required]
         public string CUSTOMERCODE { get; set; }
