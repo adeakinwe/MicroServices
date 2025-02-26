@@ -16,19 +16,11 @@ spec:
         - name: mysql
           image: mysql:8.0
           env:
-             - name: MYSQL_HOST
-               value: mysql-clusterip-svc
-             - name: MYSQL_USER
-               value: root
              - name: MYSQL_ROOT_PASSWORD
-               value: 
-             - name: MYSQL_PASSWORD
                valueFrom:
                 secretKeyRef:
                   name: mysql-secret
                   key: MYSQL_ROOT_PASSWORD
-             - name: MYSQL_DATABASE
-               value: "CUSTOMERSERVICEDB"
           ports:
             - containerPort: 3306
           readinessProbe:
