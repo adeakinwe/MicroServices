@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,5 +30,6 @@ namespace CustomerService.Models
         public DateTime DATETIMECREATED { get; set; }
         public int? LASTUPDATEDBY { get; set; }
         public DateTime? DATETIMEUPDATED { get; set; }
+        public ICollection<TBL_CUSTOMER_ORDER> ORDERS { get; set;}
     }
 }

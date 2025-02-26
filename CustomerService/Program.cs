@@ -42,7 +42,7 @@ if (!string.IsNullOrWhiteSpace(mysqlPassword) && connectionString.Contains("__MY
 Console.WriteLine($"ConnectionString: {connectionString}");
 
 // Add services to the container
-if (env.IsProduction() || !string.IsNullOrWhiteSpace(mysqlPassword))
+if (env.IsProduction())
 {
     Console.WriteLine("Running in Production mode (Using MySQL)");
     builder.Services.AddDbContext<AppDbContext>(options =>
