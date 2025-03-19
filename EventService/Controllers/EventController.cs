@@ -1,5 +1,11 @@
 using System;
 using System.Collections.Generic;
+using AutoMapper;
+using EventService.DTOs;
+using EventService.Interface;
+using EventService.Models;
+
+
 //using AutoMapper;
 //using CustomerService.DTOs;
 //using CustomerService.Interface;
@@ -12,9 +18,13 @@ namespace EventService.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        public CustomerController()
+        private readonly IEvent _repo;
+        private readonly IMapper _mapper;
+
+        public CustomerController(IEvent repo, IMapper mapper)
         {
-            
+            _repo = repo;
+            _mapper = mapper;
         }
 
         [HttpGet("")]
@@ -24,6 +34,12 @@ namespace EventService.Controllers
             return Ok(rand.Next(1, 21));
         }
 
+        [HttpGet("all-customers")]
+        public ActionResult<IEnumerable<TBL_CUSTOMER>> GetAllCustomers()
+        {
+            var customers = _repo.GetAllCustomers();
+            return Ok(_mapper.Map<IEnumerable<CustomerForReturn>>(customers));
+        }
         [HttpPost]
         public ActionResult CreatedCustomer()
         {

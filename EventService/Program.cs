@@ -1,4 +1,9 @@
 using System;
+using EventService.Interface;
+using EventService.Models;
+using EventService.Repository;
+
+
 //using ProductService.Interface;
 //using ProductService.Models;
 //using CustomerService.Repository;
@@ -11,12 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//builder.Services.AddDbContext<AppDbContext>(option => 
-//option.UseInMemoryDatabase("InMem"));
-//builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
+builder.Services.AddDbContext<AppDbContext>(option => 
+option.UseInMemoryDatabase("InMem"));
+builder.Services.AddScoped<IEvent, EventRepo>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
