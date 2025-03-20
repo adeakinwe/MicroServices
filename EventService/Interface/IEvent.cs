@@ -12,7 +12,7 @@ namespace EventService.Interface
 
         IEnumerable<TBL_EVENT> GetAllEvents();
         IEnumerable<TBL_EVENT> GetEventsByCustomerId(int customerId);
-        TBL_EVENT GetEventByEventIdAndCustomerId(int eventId, int customerId);
+        TBL_EVENT GetEventByCustomerIdAndEventId(int customerId, int eventId);
         void CreateEvent(TBL_EVENT evt, int customerId);
     }
 }

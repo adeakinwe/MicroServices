@@ -23,6 +23,7 @@ namespace EventService.Repository
 
             evt.CUSTOMERID = customerId;
             context.TBL_EVENT.Add(evt);
+            SaveChanges();
         }
 
         public IEnumerable<TBL_CUSTOMER> GetAllCustomers()
@@ -40,7 +41,7 @@ namespace EventService.Repository
             return context.TBL_CUSTOMER.First(c=> c.CUSTOMERID == customerId);
         }  
 
-        public TBL_EVENT GetEventByEventIdAndCustomerId(int eventId, int customerId)
+        public TBL_EVENT GetEventByCustomerIdAndEventId(int customerId, int eventId)
         {
             var evt = context.TBL_EVENT.Where(e => e.EVENTID == eventId && e.CUSTOMERID == customerId).First();
 
