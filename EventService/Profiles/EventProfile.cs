@@ -8,9 +8,12 @@ namespace EventService.Profiles
     {
         public EventProfile()
         {
+            //Source => Target
             CreateMap<TBL_CUSTOMER, CustomerForReturn>();
             CreateMap<EventForCreation, TBL_EVENT>();
             CreateMap<TBL_EVENT, EventForReturn>();
+            CreateMap<CustomerPublishedForReturn, TBL_CUSTOMER>()
+                .ForMember(dest => dest.CUSTOMERID, opt => opt.MapFrom(src => src.customerId));
         }
     }
 }

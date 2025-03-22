@@ -15,6 +15,7 @@ namespace EventService.Repository
             ArgumentNullException.ThrowIfNull(customer);
 
             context.TBL_CUSTOMER.Add(customer);
+            SaveChanges();
         }
 
         public void CreateEvent(TBL_EVENT evt, int customerId)

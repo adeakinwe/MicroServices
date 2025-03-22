@@ -6,7 +6,9 @@ namespace EventService.Models
     {
         [Key]
         [Required]
+        public int ID { get; set; }
         public int CUSTOMERID { get; set; }
-        public required ICollection<TBL_EVENT> EVENTS { get; set; }
+        public string CUSTOMERCODE { get; set; }
+        public ICollection<TBL_EVENT> EVENTS { get; set; }
     }
 }
