@@ -1,4 +1,5 @@
 using System;
+using CustomerService.AsyncDataServices;
 using CustomerService.Interface;
 using CustomerService.Models;
 using CustomerService.Repository;
@@ -58,6 +59,7 @@ else
 // Dependency Injections
 builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
 builder.Services.AddHttpClient<IEventDataClient, HttpEventDataClient>();
+builder.Services.AddSingleton<IMessageBusClient,MessageBusClient>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -78,7 +80,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 

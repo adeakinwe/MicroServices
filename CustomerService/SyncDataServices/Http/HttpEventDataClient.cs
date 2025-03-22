@@ -26,7 +26,7 @@ namespace CustomerService.SyncDataServices.Http
                 "application/json"
             );
 
-            var response = await _httpClient.PostAsync($"{_config["eventservicebaseurl"]}/api/v1/event/customer", httpContent); 
+            var response = await _httpClient.PostAsync($"{_config["eventservicebaseurl"]}/api/v1/customer", httpContent); 
 
             if (response.IsSuccessStatusCode){
                 Console.WriteLine("Post to event service successfull!");

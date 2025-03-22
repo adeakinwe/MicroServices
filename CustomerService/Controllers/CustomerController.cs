@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using CustomerService.AsyncDataServices;
 using CustomerService.DTOs;
 using CustomerService.Interface;
 using CustomerService.Models;
@@ -15,33 +16,40 @@ namespace CustomerService.Controllers
     [Route("api/v1/[controller]")]
     public class CustomerController: ControllerBase
     {
-        private readonly ICustomerRepo repo;
-        private readonly IMapper mapper;
-        private readonly IEventDataClient eventDataClient;
+        private readonly ICustomerRepo _repo;
+        private readonly IMapper _mapper;
+        private readonly IEventDataClient _eventDataClient;
+        private readonly IMessageBusClient _messageBusClient;
 
-        public CustomerController(ICustomerRepo _repo, IMapper _mapper, IEventDataClient _eventDataClient)
+        public CustomerController(
+            ICustomerRepo repo, 
+            IMapper mapper, 
+            IEventDataClient eventDataClient,
+            IMessageBusClient messageBusClient
+            )
         {
-            repo = _repo;
-            mapper = _mapper;
-            eventDataClient = _eventDataClient;
+            _repo = repo;
+            _mapper = mapper;
+            _eventDataClient = eventDataClient;
+            _messageBusClient = messageBusClient;
         }
 
         [HttpGet("all")]
         public ActionResult<List<CustomerForReturn>> GetAllCustomers()
         {
-            var customers = repo.GetAllCustomers();
+            var customers = _repo.GetAllCustomers();
 
-            return Ok(mapper.Map<List<CustomerForReturn>>(customers));
+            return Ok(_mapper.Map<List<CustomerForReturn>>(customers));
         }
 
         [HttpGet("{customerId:int}")]
         public ActionResult<List<CustomerForReturn>> GetCustomerById(int customerId)
         {
-            var customer = repo.GetCustomerById(customerId);
+            var customer = _repo.GetCustomerById(customerId);
 
             if (customer == null) return NotFound();
 
-            return Ok(mapper.Map<CustomerForReturn>(customer));
+            return Ok(_mapper.Map<CustomerForReturn>(customer));
         }
 
         [HttpPost("add-customer")]
@@ -49,17 +57,31 @@ namespace CustomerService.Controllers
         {
             try 
             {
-                var newCustomer = mapper.Map<TBL_CUSTOMER>(customer);
-                repo.AddCustomer(newCustomer);
+                var newCustomer = _mapper.Map<TBL_CUSTOMER>(customer);
+                _repo.AddCustomer(newCustomer);
     
-                var addedCustomer = mapper.Map<CustomerForReturn>(newCustomer);
+                var addedCustomer = _mapper.Map<CustomerForReturn>(newCustomer);
 
+                //Send Sync Message
                 try 
                 {
-                    await eventDataClient.SendCustomerCreatedToEventService(addedCustomer);
+                    await _eventDataClient.SendCustomerCreatedToEventService(addedCustomer);
                 }
-                catch (Exception ex){
-                    Console.WriteLine($"An error occurred while sending created customers to event service: {ex.Message}");
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while sending created customer to event service: {ex.Message}");
+                }
+
+                //Send Async Message to RabbitMQ
+                try
+                {
+                    var customerPublishedModel = _mapper.Map<CustomerPublishedForCreation>(addedCustomer);
+                    customerPublishedModel.Event = "Customer_Published";
+                    _messageBusClient.PublishNewCustomer(customerPublishedModel);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while sending created customer asynchronously to RabbitMQ: {ex.Message}");
                 }
                 return CreatedAtRoute(new {Id = addedCustomer.customerId}, addedCustomer);
             } 
@@ -74,7 +96,7 @@ namespace CustomerService.Controllers
         {
             try 
             {
-                repo.UpdateCustomer(customer, customerId);
+                _repo.UpdateCustomer(customer, customerId);
     
                 return Ok();
             } 
