@@ -27,12 +27,12 @@ namespace EventService.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("")]
-        public ActionResult<int> GetRandomCustomerId()
-        {
-            Random rand = new Random();
-            return Ok(rand.Next(1, 21));
-        }
+        // [HttpGet("")]
+        // public ActionResult<int> GetRandomCustomerId()
+        // {
+        //     Random rand = new Random();
+        //     return Ok(rand.Next(1, 21));
+        // }
 
         [HttpGet("all-customers")]
         public ActionResult<IEnumerable<TBL_CUSTOMER>> GetAllCustomers()

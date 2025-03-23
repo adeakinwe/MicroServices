@@ -39,12 +39,12 @@ namespace EventService.Repository
 
         public TBL_CUSTOMER GetCustomerById(int customerId)
         {
-            return context.TBL_CUSTOMER.First(c=> c.CUSTOMERID == customerId);
+            return context.TBL_CUSTOMER.FirstOrDefault(c=> c.CUSTOMERID == customerId);
         }  
 
         public TBL_EVENT GetEventByCustomerIdAndEventId(int customerId, int eventId)
         {
-            var evt = context.TBL_EVENT.Where(e => e.EVENTID == eventId && e.CUSTOMERID == customerId).First();
+            var evt = context.TBL_EVENT.Where(e => e.EVENTID == eventId && e.CUSTOMERID == customerId).FirstOrDefault();
 
             return evt;
         }

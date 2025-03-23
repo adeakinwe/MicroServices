@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using System.Text.Json;
 using AutoMapper;
 using EventService.DTOs;
@@ -60,6 +59,7 @@ namespace EventService.EventProcessing
                 {
                     var cust = _mapper.Map<TBL_CUSTOMER>(deserializedPublishedCustomer);
                     repo.CreateCustomer(cust);
+                    Console.WriteLine("Customer Created");
                 }
                 catch(Exception ex)
                 {

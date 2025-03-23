@@ -13,7 +13,7 @@ namespace EventService.Models
         public string NAME { get; set; }
         public int CUSTOMERID { get; set; }
         public string DESCRIPTION { get; set; }
-        public DateTime DATECREATED { get; set; } = DateTime.Now;
+        public DateTime DATETIMECREATED { get; set; } = DateTime.Now;
         public TBL_CUSTOMER CUSTOMER { get; set; }
     }
 }

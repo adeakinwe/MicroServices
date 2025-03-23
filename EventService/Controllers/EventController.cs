@@ -27,12 +27,12 @@ namespace EventService.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("")]
-        public ActionResult<int> GetRandomCustomerId()
-        {
-            Random rand = new Random();
-            return Ok(rand.Next(1, 21));
-        }
+        // [HttpGet("")]
+        // public ActionResult<int> GetRandomCustomerId()
+        // {
+        //     Random rand = new Random();
+        //     return Ok(rand.Next(1, 21));
+        // }
 
         [HttpGet("all-events")]
         public ActionResult<IEnumerable<EventForReturn>> GetAllEvents()
@@ -80,17 +80,18 @@ namespace EventService.Controllers
             var event_ = _mapper.Map<TBL_EVENT>(eventForCreation);
 
             _repo.CreateEvent(event_, customerId);
-
-            return CreatedAtRoute(nameof(GetEventByCustomerIdAndEventId), new {customerId = customerId, eventId = event_.EVENTID});
+            //return Ok();
+            //return CreatedAtRoute(nameof(GetEventByCustomerIdAndEventId), new { customerId, eventId = event_.EVENTID});
+            return CreatedAtRoute(new { eventId = event_.EVENTID}, event_);
         }
 
-        [HttpPost]
-        public ActionResult CreatedCustomer()
-        {
-            Console.WriteLine("created customer successfully posted to event service");
+        // [HttpPost]
+        // public ActionResult CreatedCustomer()
+        // {
+        //     Console.WriteLine("created customer successfully posted to event service");
             
-            return Ok();
-        }
+        //     return Ok();
+        // }
 
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using EventService.AsyncDataServicces;
 using EventService.EventProcessing;
 using EventService.Interface;
 using EventService.Models;
@@ -22,6 +23,7 @@ option.UseInMemoryDatabase("InMem"));
 builder.Services.AddScoped<IEvent,EventRepo>();
 builder.Services.AddSingleton<IEventProcessor,EventProcessor>();
 builder.Services.AddControllers();
+builder.Services.AddHostedService<MessageBusSubscriber>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
