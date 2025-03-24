@@ -30,3 +30,7 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 80
+    - name: customerGRPC
+      protocol: TCP
+      port: 650 
+      targetPort: 650
