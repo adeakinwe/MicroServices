@@ -12,6 +12,7 @@ namespace CustomerService.Profiles
             CreateMap<TBL_CUSTOMER, CustomerForReturn>();
             CreateMap<CustomerForCreation, TBL_CUSTOMER>();
             CreateMap<CustomerForReturn,CustomerPublishedForCreation>();
+            CreateMap<TBL_CUSTOMER, GrpcCustomerModel>();
         }
     }
 }

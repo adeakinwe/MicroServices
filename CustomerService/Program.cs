@@ -1,11 +1,14 @@
 using System;
+using System.IO;
 using CustomerService.AsyncDataServices;
 using CustomerService.Interface;
 using CustomerService.Models;
 using CustomerService.Repository;
+using CustomerService.SyncDataServices.Grpc;
 using CustomerService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,6 +65,7 @@ builder.Services.AddHttpClient<IEventDataClient, HttpEventDataClient>();
 builder.Services.AddSingleton<IMessageBusClient,MessageBusClient>();
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddGrpc();
 
 // Swagger (API Documentation)
 builder.Services.AddEndpointsApiExplorer();
@@ -83,6 +87,15 @@ if (app.Environment.IsDevelopment())
 //app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+// Register gRPC service
+app.MapGrpcService<GrpcCustomerService>();
+
+// Serve the proto file
+app.MapGet("/protos/customers.proto", async context =>
+{
+    await context.Response.WriteAsync(await File.ReadAllTextAsync("protos/customers.proto"));
+});
 
 Console.WriteLine("Application is starting...");
 app.Run();

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "CustomerService";
 
-service GrpcCustomerService {
+service GrpcCustomer {
     rpc GetAllCustomers (GetAllRequest) returns (CustomerResponse);
 }
 
@@ -11,9 +11,8 @@ message GetAllRequest {}
 message GrpcCustomerModel {
     int32 customerId = 1;
     string customerCode = 2;
-    string publisher = 3;
 }
 
 message CustomerResponse {
-    repeated GrpcCustomerModel platform = 1;
+    repeated GrpcCustomerModel customer = 1;
 }
