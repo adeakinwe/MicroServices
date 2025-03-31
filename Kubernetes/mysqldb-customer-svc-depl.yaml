@@ -1,64 +1,33 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mysqldb-depl
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mysql
-  template:
-    metadata:
-      labels:
-        app: mysql
-    spec:
-      containers:
-        - name: mysql
-          image: mysql:8.0
-          env:
-             - name: MYSQL_ROOT_PASSWORD
-               valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_ROOT_PASSWORD
-          ports:
-            - containerPort: 3306
-          readinessProbe:
-            exec:
-              command: ["mysqladmin", "ping", "-h", "localhost"]
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            failureThreshold: 3
-          volumeMounts:
-            - name: mysql-storage
-              mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-storage
-          persistentVolumeClaim:
-            claimName: mysqldb-pvc
----
 apiVersion: v1
 kind: Service
 metadata:
   name: mysql-clusterip-svc
 spec:
-  selector:
-    app: mysql
-  ports:
-    - protocol: TCP
-      port: 3306
-      targetPort: 3306
-  type: ClusterIP
+  type: ExternalName
+  externalName: host.docker.internal  # Replace with your local machine IP on Linux
 ---
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: mysql-loadbalancer
+  name: mysqllocaldb-depl
 spec:
+  replicas: 1
   selector:
-    app: mysql
-  ports:
-    - protocol: TCP
-      port: 3306
-      targetPort: 3306
-  type: LoadBalancer
+    matchLabels:
+      app: customerservice
+  template:
+    metadata:
+      labels:
+        app: customerservice
+    spec:
+      containers:
+        - name: customerservice
+          image: adeakinwe/customerservice:net8.0
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=mysql-clusterip-svc;Port=3306;Database=CUSTOMERSERVICEDB;User=root;Password=$(MYSQL_ROOT_PASSWORD);"
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_ROOT_PASSWORD

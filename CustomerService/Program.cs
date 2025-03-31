@@ -28,6 +28,7 @@ builder.Configuration
 
 // Get MySQL password from environment variables (SECURE)
 string mysqlPassword = Environment.GetEnvironmentVariable("MYSQL_ROOT_PASSWORD") ?? "";
+//string mysqlPassword = builder.Configuration["MYSQL_ROOT_PASSWORD"];
 Console.WriteLine($"Password: {mysqlPassword}");
 if (string.IsNullOrWhiteSpace(mysqlPassword))
 {
@@ -37,7 +38,7 @@ if (string.IsNullOrWhiteSpace(mysqlPassword))
 // Get database connection string
 string connectionString = builder.Configuration.GetConnectionString("CustomerSvcConn");
 
-// Inject MySQL password into connection string if it's missing
+//Inject MySQL password into connection string if it's missing
 if (!string.IsNullOrWhiteSpace(mysqlPassword) && connectionString.Contains("__MYSQL_ROOT_PASSWORD__"))
 {
     connectionString = connectionString.Replace("__MYSQL_ROOT_PASSWORD__", mysqlPassword);

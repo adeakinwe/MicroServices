@@ -7,15 +7,15 @@ namespace EventService.Models
     {
         public static void PrepPopulate(IApplicationBuilder applicationBuilder)
         {
-        using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope()) 
-        {
-            var grpcClient = serviceScope.ServiceProvider.GetService<ICustomerDataClient>();
+            Console.WriteLine("I'm preparing to populate event db via grpc....");
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope()) 
+            {
+                var grpcClient = serviceScope.ServiceProvider.GetService<ICustomerDataClient>();
 
-            var customers = grpcClient.ReturnAllCustomers();
+                var customers = grpcClient.ReturnAllCustomers();
 
-            SeedData(serviceScope.ServiceProvider.GetService<IEvent>(), customers);
-        }
-
+                SeedData(serviceScope.ServiceProvider.GetService<IEvent>(), customers);
+            }
         }
 
         private static void SeedData(IEvent repo, IEnumerable<TBL_CUSTOMER> customers)
