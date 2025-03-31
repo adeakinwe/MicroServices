@@ -1,27 +1,19 @@
-using System;
+using EventService.SyncDataServices.Grpc;
 using EventService.AsyncDataServicces;
 using EventService.EventProcessing;
 using EventService.Interface;
 using EventService.Models;
 using EventService.Repository;
-
-
-//using ProductService.Interface;
-//using ProductService.Models;
-//using CustomerService.Repository;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddDbContext<AppDbContext>(option => 
 option.UseInMemoryDatabase("InMem"));
 builder.Services.AddScoped<IEvent,EventRepo>();
 builder.Services.AddSingleton<IEventProcessor,EventProcessor>();
+builder.Services.AddScoped<ICustomerDataClient,CustomerDataClient>();
 builder.Services.AddControllers();
 builder.Services.AddHostedService<MessageBusSubscriber>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -43,6 +35,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//PrepDb.PrepPopulate(app);
+PrepDb.PrepPopulate(app);
 
 app.Run();

@@ -22,7 +22,7 @@ Console.WriteLine($"Current Environment: {env.EnvironmentName}");
 
 // Load configuration
 builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    //.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables();
 

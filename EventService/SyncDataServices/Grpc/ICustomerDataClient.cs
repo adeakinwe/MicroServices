@@ -1,6 +1,6 @@
 using EventService.Models;
 
-namespace CustomerService.SyncDataServices.Grpc
+namespace EventService.SyncDataServices.Grpc
 {
     public interface ICustomerDataClient
     {

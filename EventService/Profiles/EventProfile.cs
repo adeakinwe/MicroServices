@@ -1,4 +1,5 @@
 using AutoMapper;
+using CustomerService;
 using EventService.DTOs;
 using EventService.Models;
 
@@ -14,6 +15,9 @@ namespace EventService.Profiles
             CreateMap<TBL_EVENT, EventForReturn>();
             CreateMap<CustomerPublishedForReturn, TBL_CUSTOMER>()
                 .ForMember(dest => dest.CUSTOMERID, opt => opt.MapFrom(src => src.customerId));
+            CreateMap<GrpcCustomerModel, TBL_CUSTOMER>()
+                .ForMember(dest => dest.CUSTOMERID, opt => opt.MapFrom(src => src.CustomerId))
+                .ForMember(dest => dest.EVENTS, opt => opt.Ignore());
         }
     }
 }
