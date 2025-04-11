@@ -13,9 +13,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// Open Telemetry
+builder.Services.AddOpenTelemetry()
+    .WithMetrics(opt =>
+        opt
+            .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("OpenRemoteManage.GatewayAPI"))
+            .AddMeter("OpenRemoteManageMeter")
+            .AddAspNetCoreInstrumentation()
+            .AddRuntimeInstrumentation()
+            .AddProcessInstrumentation()
+            .AddOtlpExporter(opt => {
+                opt.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"]);
+            })
+    );
 // Inject IWebHostEnvironment
 var env = builder.Environment;
 Console.WriteLine($"Current Environment: {env.EnvironmentName}");
